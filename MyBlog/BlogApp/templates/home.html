@@ -1,0 +1,27 @@
+{% extends 'Base.html' %}
+
+{% block content %}
+<h1>Recent posts</h1>
+<ul>
+{% for blogpost in object_list %}
+    <li>
+        <a href="{% url 'blogs' blogpost.pk %}" >{{blogpost.title}}</a> -
+        {{blogpost.author.first_name}}
+        {{blogpost.author.last_name}}
+        {% if user.is_authenticated %}
+        {% if user.id == blogpost.author.id %}
+        <small>
+             - <a href="{% url 'update_blog' blogpost.pk %}"> Edit</a> &ensp;
+            <a href="{% url 'delete_blog' blogpost.pk %}">Delete</a>
+        </small>
+        {% endif %}
+        {% endif %}
+        <br/>
+     {{blogpost.snippet}}<br/>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}
+
+
+

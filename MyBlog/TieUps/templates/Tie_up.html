@@ -1,0 +1,36 @@
+{% extends 'Base.html' %}
+
+{% block title %}
+    Tie Ups
+{% endblock %}
+
+{% block content %}
+<h1>Our Tie Ups</h1>
+<br/>
+<div class="row row-cols-1 row-cols-md-2">
+    {% for post in object_list %}
+    <div class="col mb-4">
+      <div class="card">
+        <div class="view overlay">
+          <img class="card-img-top" src="{{post.image.url}}" alt="">
+          <a href="#!">
+            <div class="mask rgba-white-slight"></div>
+          </a>
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">{{post.title}}</h4>
+          <small class="card-text">{{post.type}}</small>
+          <p class="card-text">{{post.snippet}}</p>
+          <a href="{% url 'tie_up_details' post.pk %}" class="btn btn-primary btn-md">Read more</a>
+          {% if user.id == post.author.id %}
+          <br><br/>
+          <a href="{% url 'update_tie_up' post.pk %}" class="btn btn-success btn-md">Edit</a>
+          <a href="{% url 'delete_tie_up' post.pk %}" class="btn btn-danger btn-md">Delete</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+<br><br/>
+{% endblock %}

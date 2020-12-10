@@ -1,0 +1,20 @@
+{% extends 'Base.html' %}
+
+{% block title %}
+    Change Settings
+{% endblock %}
+
+{% block content %}
+<h1>Change Your Profile Settings</h1>
+<br/>
+<form method="POST">
+    <div class="form-group">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </div>
+    <button class="btn btn-dark">Update Settings</button>
+
+</form>
+<br/>
+
+{% endblock %}

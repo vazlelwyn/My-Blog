@@ -1,0 +1,33 @@
+{% extends 'Base.html' %}
+
+{% block title %}
+    Update Tie Ups
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% if user.id == post.author.id %}
+<h1>Edit Property Tie Up</h1>
+<br/>
+<form method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ images.management_form }}
+        {% for form in images %}
+        {{form.as_p}}
+        {% endfor %}
+        <button class="btn btn-dark">Update</button>
+    </div>
+
+</form>
+{% else %}
+<strong>You are not the author of this property post.</strong><br/>
+<p><a href="{% url 'login' %}">Click Here</a> to login</p>
+{% endif %}
+{% else %}
+<strong>You need to login first.</strong><br/>
+<p><a href="{% url 'login' %}">Click Here</a> to login</p>
+{% endif %}
+
+{% endblock %}

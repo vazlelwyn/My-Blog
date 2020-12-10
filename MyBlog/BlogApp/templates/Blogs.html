@@ -1,0 +1,82 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ blogpost.title }}
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ blogpost.title }}</h1>
+<small> by {{blogpost.author.first_name}} {{blogpost.author.last_name}} on
+    {{blogpost.blog_date}}
+    {% if user.is_authenticated %}
+    {% if user.id == blogpost.author.id %}
+    - <a href="{% url 'update_blog' blogpost.pk %}"> Edit</a> &ensp;
+    <a href="{% url 'delete_blog' blogpost.pk %}">Delete</a>
+    {% endif %}
+    {% endif %}
+</small><br/>
+{% if blogpost.reference_author %}
+Reference author : {{ blogpost.reference_author }}
+{% endif %}
+<hr>
+{% if blogpost.header_image %}
+    <img src="{{blogpost.header_image.url}}">
+{% endif %}
+<p>{{blogpost.body|safe}}</p>
+<br/>
+<form action = "{% url 'like_blogpost' blogpost.pk %}" method="POST">
+    {% csrf_token %}
+    {% if user.is_authenticated %}
+    {% if liked %}
+        <button type="submit" name="blogpost_id" value="{{ blogpost.id }}" class="btn btn-danger btn-sm">Dislike</button>
+    {% else %}
+        <button type="submit" name="blogpost_id" value="{{ blogpost.id }}" class="btn btn-success btn-sm">Like</button>
+    {% endif %}
+    {% else %}
+    <a href="{% url 'login' %}">Login</a> to like - 
+    {% endif %}
+    {{ total_likes }} Likes
+</form>
+
+<hr>
+<br>
+
+<div class="card mb-3">
+  <div class="row no-gutters">
+    <div class="col-md-2">
+      {% if blogpost.author.userprofile.profile_pic %}
+      <img src="{{blogpost.author.userprofile.profile_pic.url}}" class="card-img" alt="...">
+      {% else %}
+      <img src="{% static 'BlogApp/Images/user.png' %}" class="card-img" alt="...">
+      {% endif %}
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <h5 class="card-title">{{blogpost.author.first_name}} {{blogpost.author.last_name}}</h5>
+         <p class="text-muted">
+             <a href="{% url 'user_profile' blogpost.author.userprofile.id %}">Profile </a>
+             {% if blogpost.author.userprofile.website_url %}
+             | <a href="{{blogpost.author.userprofile.website_url}}">Website </a>
+             {% endif %}
+             {% if blogpost.author.userprofile.facebook_url %}
+             | <a href="{{blogpost.author.userprofile.facebook_url}}">Facebook </a>
+             {% endif %}
+             {% if blogpost.author.userprofile.twitter_url %}
+             | <a href="{{blogpost.author.userprofile.twitter_url}}">Twitter </a>
+             {% endif %}
+             {% if blogpost.author.userprofile.instagram_url %}
+             | <a href="{{blogpost.author.userprofile.instagram_url}}">Instagram </a>
+             {% endif %}
+             {% if blogpost.author.userprofile.pinterest_url %}
+             | <a href="{{blogpost.author.userprofile.pinterest_url}}">Pinterest </a>
+             {% endif %}
+          <p/>
+        <p class="card-text">{{blogpost.author.userprofile.bio}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

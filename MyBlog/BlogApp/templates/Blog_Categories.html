@@ -1,0 +1,32 @@
+{% extends 'Base.html' %}
+
+{% block title %}
+    Categories
+{% endblock %}
+
+{% block content %}
+
+{% if category_posts %}
+<h1>{{ cats }}</h1>
+<ul>
+{% for blogpost in category_posts %}
+    <li>
+        <a href="{% url 'blogs' blogpost.pk %}" >{{blogpost.title}}</a>-
+        {{blogpost.author.first_name}}
+        {{blogpost.author.last_name}}
+        {% if user.is_authenticated %}
+        {% if user.id == blogpost.author.id %}
+        <small>
+            - <a href="{% url 'update_blog' blogpost.pk %}"> Edit</a> &ensp;
+            <a href="{% url 'delete_blog' blogpost.pk %}">Delete</a>
+        </small> <br/>
+        {% endif %}
+        {% endif %}
+     {{blogpost.body|slice:":200"|safe}}<br/>
+    </li>
+{% endfor %}
+</ul>
+{% else %}
+    <h2>Sorry page not found</h2>
+{% endif %}
+{% endblock %}

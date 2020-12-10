@@ -1,0 +1,31 @@
+{% extends 'Base.html' %}
+
+{% block title %}
+    Update Blog
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{% if user.id == blogpost.author.id %}
+<h1>Edit Blog Post</h1>
+<br/>
+<form method="POST">
+    <div class="form-group">
+        {% csrf_token %}
+        {{form.media}}
+        {{ form.as_p }}
+    </div>
+    <button class="btn btn-dark">Update</button>
+
+</form>
+{% else %}
+<strong>You are not the author of this blog.</strong><br/>
+<p><a href="{% url 'login' %}">Click Here</a> to login</p>
+{% endif %}
+{% else %}
+<strong>You need to login first.</strong><br/>
+<p><a href="{% url 'login' %}">Click Here</a> to login</p>
+{% endif %}
+
+
+{% endblock %}
